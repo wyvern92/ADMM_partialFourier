@@ -5,16 +5,15 @@ n = 100;
 N = n*n;
 
 m = floor(0.7*n);
-k = floor(.002*N);
+k = floor(.001*N);
 fprintf('\nSize [n,m,k] = [%i,%i,%i]\n',n,m,k);
 
 % A = randn(m,n) + 1i*randn(m,n);
 
 % when using DFT matrix
 % the prediction is all 0? 
-
 % Observe an intereseting pattern: for complex signals, detection is good ;
-% when using real signals, DFT matrix will not be a good choice? Probably,
+% when using real signals, DFT matrix will not be a good choice?
 % need to explore more in the future.
 
 A = dftmtx(n); 
@@ -34,17 +33,17 @@ b = F*(xs) + sigma*randn(m*m,1);
 
 rho = 1e-3;
 
-% call YALL1 
+% kronecker 
 disp('--- YALL1 with kronecker ---');
 opts.tol = 1e-10; 
 opts.rho = rho;
 opts.nonorth = 1;
  tic; [x1,Out] = yall1(kron(A,A), b, opts); toc
 
-% call self-defined A
+% fft2d
 
 disp('--- yall1 with fft2d ---');
-F = Fmap(picks, n, m);
+F = Fmap(picks, n, m); % using FFT2d
 tic; x2 = yall1(F, b, opts); toc
 
 dx12 = norm(x1-x2)/norm(x1);
