@@ -22,7 +22,7 @@ F = Fmap(Ind, n, m);
 opts.nonorth = 1;
 opts.basis = wavelet_basis(xsize); % use wavelet basis for L1
 opts.tol = 4*1e-3; 
-opts.rho = 1e-1; % parameter for the inverse of L1's lambda
+opts.rho = 1e-10; % parameter for the inverse of L1's lambda
 
 tic; 
 [x,Out] = yall1(F, b, opts);  
