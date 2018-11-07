@@ -319,7 +319,7 @@ if print; iprint1(1); end
         % check relative change
         xrel_chg = norm(x-xp)/norm(x);
         
-        fprintf("%f\n",xrel_chg); % print
+        fprintf("%f\n",norm(x)); % print
         % fprintf("%f\n",norm(x));
         
         if xrel_chg < tol*(1 - q)

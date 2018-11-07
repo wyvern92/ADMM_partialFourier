@@ -4,7 +4,7 @@ clear;
 n = 100;
 N = n*n;
 
-m = floor(0.7*n);
+m = floor(0.8*n);
 k = floor(.001*N);
 fprintf('\nSize [n,m,k] = [%i,%i,%i]\n',n,m,k);
 
@@ -31,14 +31,21 @@ xs(p(1:k)) = randn(k,1) + 1i*rand(k,1);
 sigma = 0.005;
 b = F*(xs) + sigma*randn(m*m,1); 
 
-rho = 1e-3;
+rho = 1e-30;
 
 % kronecker 
 disp('--- YALL1 with kronecker ---');
-opts.tol = 1e-10; 
+opts.tol = 1e-3; 
 opts.rho = rho;
 opts.nonorth = 1;
- tic; [x1,Out] = yall1(kron(A,A), b, opts); toc
+% opts.mu = 1e3;
+
+% try different basis
+xsize = [n n];
+opts.basis.trans = @(x)reshape(ifft2(reshape(x,xsize))*n*n,numel(xs),1);
+opts.basis.times = @(x)reshape(fft2(reshape(x,xsize)),numel(xs),1);
+
+tic; [x1,Out] = yall1(kron(A,A), b, opts); toc
 
 % fft2d
 
@@ -51,10 +58,10 @@ fprintf('Diff. of the two: %6.4e\n\n',dx12)
 figure(1);
 set(gca,'fontsize',18)
 plot(1:N,real(x1),'bo',1:N,real(x2),'r.',1:N,real(xs),'k*');
-legend('Kronecker','FFT2','Exact')
+legend('Kronecker','FFT2','Exact');
 figure(2);
 plot(1:N,imag(x1),'bo',1:N,imag(x2),'r.',1:N,imag(xs),'k*');
-legend('Kronecker','FFT2','Exact')
+legend('Kronecker','FFT2','Exact');
 
 
 
